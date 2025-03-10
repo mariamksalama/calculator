@@ -18,6 +18,7 @@ const CalculatorGrid = styled(Box)({
   width: '100%',
   gap: spacing.md,
   height: '100%',
+  touchAction: 'manipulation',
 });
 
 interface NumberPadProps {
