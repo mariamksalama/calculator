@@ -57,7 +57,6 @@ export const calculateResult = (expression: string): string => {
     for (let i = 1; i < parts.length; i += 2) {
       const operation = parts[i];
       const nextNumber = parseFloat(parts[i + 1]);
-      console.log(operation, nextNumber);
       if (!isOperator(operation) || isNaN(nextNumber)) {
         throw new Error('Invalid expression');
       }

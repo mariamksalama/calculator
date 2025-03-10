@@ -59,7 +59,6 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
     } else {
       inputElement.scrollLeft = inputElement?.scrollWidth;
     }
-    console.log('v', value, lastCursorPosition.current);
   }, [value]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +66,6 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
     const cursorPos = target.selectionStart ?? value.length;
     lastCursorPosition.current = cursorPos;
     window.scrollTo(cursorPos * 10, 0);
-    console.log('c', cursorPos);
 
     const newValue = target.value.replace(/[^0-9+\-×÷%.]/g, '');
     onChange(newValue);
