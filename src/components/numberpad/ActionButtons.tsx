@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import { CalculatorButton } from './CalculatorButton';
 import { actionButtons } from '../../utils/buttonUtils';
+import { useCalculator } from '../../context/CalculatorContext';
 
 const ActionsRow = styled(Box)({
   display: 'grid',
@@ -22,11 +23,12 @@ interface ActionButtonsProps {
 
 export const ActionButtons = ({ onClick }: ActionButtonsProps) => {
   const [historyButton, equalsButton] = actionButtons;
+  const { setIsHistoryOpen } = useCalculator();
 
   return (
     <ActionsRow>
       <Box>
-        <CalculatorButton {...historyButton} onClick={() => onClick(historyButton.value)} />
+        <CalculatorButton {...historyButton} onClick={() => setIsHistoryOpen(true)} />
       </Box>
       <Box />
       <Box>
