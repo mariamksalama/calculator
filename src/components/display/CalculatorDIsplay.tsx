@@ -42,6 +42,7 @@ const StyledInput = styled(Input)({
     whiteSpace: 'nowrap',
     overflowX: 'auto',
     display: 'block',
+    touchAction: 'pan-x',
   },
   '&:hover': {
     cursor: 'text',
