@@ -6,74 +6,91 @@ import {
   numberButtons,
   operatorButtons,
   decimalButton,
+  actionButtons,
 } from '../../utils/ButtonUtils';
 
-const MainGrid = styled(Box)({
+const CalculatorGrid = styled(Box)({
   display: 'grid',
   gridTemplateColumns: '3fr 1fr',
+  gridTemplateRows: 'auto 1fr auto',
+  gridTemplateAreas: `
+    "controls operators"
+    "numbers operators"
+    "actions actions"
+  `,
   width: '100%',
   gap: '10px',
+  height: '100%',
 });
 
-const TopRow = styled(Box)({
+const ControlsRow = styled(Box)({
   display: 'grid',
   gridTemplateColumns: 'repeat(3, 1fr)',
-  width: '100%',
+  gridArea: 'controls',
   gap: '10px',
   justifyItems: 'center',
+  alignItems: 'center',
 });
 
-const NumberPad = styled(Box)({
+const NumbersGrid = styled(Box)({
   display: 'grid',
   gridTemplateColumns: 'repeat(3, 1fr)',
+  gridArea: 'numbers',
   gap: '10px',
-  width: '100%',
   justifyItems: 'center',
   '& .zero-button': {
     gridColumn: 'span 2',
   },
 });
-const OperatorGrid = styled(Box)({
+
+const OperatorsGrid = styled(Box)({
   display: 'grid',
-  gridTemplateRows: 'repeat(5, 1fr)',
-  height: '100%',
+  gridArea: 'operators',
+  gap: '10px',
   justifyItems: 'center',
-  alignItems: 'center',
+  alignContent: 'space-between',
+});
+
+const ActionsRow = styled(Box)({
+  display: 'grid',
+  gridTemplateColumns: '1fr 2fr 1fr',
+  gridArea: 'actions',
+  gap: '10px',
+  '& > :first-of-type': {
+    justifySelf: 'start',
+  },
+  '& > :last-child': {
+    justifySelf: 'center',
+  },
 });
 
 interface NumberPadProps {
   onClick: (value: string, isOperator?: boolean) => void;
 }
 
-export const NumbeberPad: React.FC<NumberPadProps> = ({ onClick }) => {
+export const NumberPad: React.FC<NumberPadProps> = ({ onClick }) => {
+  const [historyButton, equalsButton] = actionButtons;
+
   return (
-    <MainGrid>
-      <Box
-        display="flex"
-        flexDirection="column"
-        gap="10px"
-        role="group"
-        aria-label="Calculator keypad"
-      >
-        <TopRow role="group" aria-label="Control buttons">
-          {controlButtons.map((button) => (
-            <CalculatorButton key={button.value} {...button} onClick={() => {}} />
-          ))}
-        </TopRow>
-        <NumberPad role="group" aria-label="Number pad">
-          {numberButtons.map((button) => (
-            <CalculatorButton
-              key={button.value}
-              {...button}
-              onClick={() => onClick(button.value)}
-              className={button.value === '0' ? 'zero-button' : ''}
-              aria-label={button.ariaLabel}
-            />
-          ))}
-          <CalculatorButton {...decimalButton} onClick={() => onClick(decimalButton.value)} />
-        </NumberPad>
-      </Box>
-      <OperatorGrid role="group" aria-label="Operator buttons">
+    <CalculatorGrid>
+      <ControlsRow role="group" aria-label="Control buttons">
+        {controlButtons.map((button) => (
+          <CalculatorButton key={button.value} {...button} onClick={() => onClick(button.value)} />
+        ))}
+      </ControlsRow>
+      <NumbersGrid role="group" aria-label="Number pad">
+        {numberButtons.map((button) => (
+          <CalculatorButton
+            key={button.value}
+            {...button}
+            onClick={() => onClick(button.value)}
+            className={button.value === '0' ? 'zero-button' : ''}
+            aria-label={button.ariaLabel}
+          />
+        ))}
+        <CalculatorButton {...decimalButton} onClick={() => onClick(decimalButton.value)} />
+      </NumbersGrid>
+      <OperatorsGrid role="group" aria-label="Operator buttons">
         {operatorButtons.map((button) => (
           <CalculatorButton
             key={button.value}
@@ -82,7 +99,16 @@ export const NumbeberPad: React.FC<NumberPadProps> = ({ onClick }) => {
             aria-label={button.ariaLabel}
           />
         ))}
-      </OperatorGrid>
-    </MainGrid>
+      </OperatorsGrid>
+      <ActionsRow>
+        <Box>
+          <CalculatorButton {...historyButton} onClick={() => onClick(historyButton.value)} />
+        </Box>
+        <Box />
+        <Box>
+          <CalculatorButton {...equalsButton} onClick={() => onClick(equalsButton.value)} />
+        </Box>
+      </ActionsRow>
+    </CalculatorGrid>
   );
 };

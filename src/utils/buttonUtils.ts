@@ -7,8 +7,7 @@ interface ButtonConfig {
 }
 
 export const controlButtons: ButtonConfig[] = [
-  //   { value: 'del', variant: 'control', ariaLabel: 'Delete' },
-  { value: '=', variant: 'control', ariaLabel: 'Equal' },
+  { value: 'del', variant: 'control', ariaLabel: 'Delete' },
   { value: 'ac', variant: 'control', ariaLabel: 'Clear all' },
   { value: '+/-', variant: 'control', ariaLabel: 'Toggle positive negative' },
 ];
@@ -34,6 +33,19 @@ export const numberButtons: ButtonConfig[] = [
   },
 ];
 
+export const actionButtons: ButtonConfig[] = [
+  {
+    value: 'H',
+    variant: 'action',
+    ariaLabel: 'View calculation history',
+  },
+  {
+    value: '=',
+    variant: 'action',
+    ariaLabel: 'Equals',
+  },
+];
+
 export const decimalButton: ButtonConfig = {
   value: '.',
   variant: 'number',
@@ -50,7 +62,9 @@ export const getButtonColor = (variant: VariantTypes) => {
       return '#4A4459';
     case 'number':
       return '#4A4459';
+    case 'action':
+      return 'black';
     default:
-      return '#4A4459';
+      return 'black';
   }
 };

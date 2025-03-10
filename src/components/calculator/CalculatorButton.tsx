@@ -34,7 +34,10 @@ const StyledButton = styled(Button, {
     textAlign: 'center',
   },
   '&:hover': {
-    backgroundColor: buttonVariant === 'number' ? '#666' : '#ffb94a',
+    backgroundColor: buttonVariant === 'action' ? undefined : '#666',
+  },
+  '&:focus': {
+    outline: 'none',
   },
 }));
 

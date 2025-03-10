@@ -2,8 +2,8 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
 import { CalculatorDisplay } from './CalculatorDIsplay';
-import { NumbeberPad } from './NumberPad';
 import { useState } from 'react';
+import { NumberPad } from './NumberPad';
 
 const StyledContainer = styled(Box)({
   display: 'flex',
@@ -33,7 +33,7 @@ export const Calculator = () => {
   return (
     <StyledContainer role="application" aria-label="Calculator">
       <CalculatorDisplay value={displayValue} />
-      <NumbeberPad onClick={handleButtonClick} />
+      <NumberPad onClick={handleButtonClick} />
     </StyledContainer>
   );
 };
