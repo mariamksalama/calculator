@@ -1,6 +1,6 @@
 import { Button, styled } from '@mui/material';
 import { VariantTypes } from '../../types/buttonTypes';
-import { getButtonColor } from '../../utils/ButtonUtils';
+import { getButtonColor } from '../../utils/buttonUtils';
 
 interface CalculatorButtonProps {
   value: string;

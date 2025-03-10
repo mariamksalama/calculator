@@ -1,9 +1,9 @@
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
-import { CalculatorDisplay } from './CalculatorDIsplay';
+import { CalculatorDisplay } from './display/CalculatorDIsplay';
 import { useState } from 'react';
-import { NumberPad } from './NumberPad';
+import { NumberPad } from './numberpad/NumberPad';
 
 const StyledContainer = styled(Box)({
   display: 'flex',

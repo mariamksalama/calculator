@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 import './App.css';
-import { Calculator } from './components/calculator/calculator';
+import { Calculator } from './components/Calculator';
 
 function App() {
   return (

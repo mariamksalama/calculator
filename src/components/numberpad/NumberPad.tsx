@@ -1,9 +1,9 @@
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { ControlButtons } from './numberpad/ControlButtons';
-import { NumberButtons } from './numberpad/NumberButtons';
-import { OperatorButtons } from './numberpad/OperatorButtons';
-import { ActionButtons } from './numberpad/ActionButtons';
+import { ControlButtons } from './ControlButtons';
+import { NumberButtons } from './NumberButtons';
+import { OperatorButtons } from './OperatorButtons';
+import { ActionButtons } from './ActionButtons';
 
 const CalculatorGrid = styled(Box)({
   display: 'grid',
