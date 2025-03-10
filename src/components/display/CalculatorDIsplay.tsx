@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 interface CalculatorDisplayProps {
   value: string;
   onChange: (value: string) => void;
+  onCursorChange: (position: number | null) => void;
 }
 
 const Display = styled(Box)({
@@ -45,17 +46,17 @@ const StyledInput = styled(Input)({
   },
 });
 
-export const CalculatorDisplay = ({ value, onChange }: CalculatorDisplayProps) => {
+export const CalculatorDisplay = ({ value, onChange, onCursorChange }: CalculatorDisplayProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const lastCursorPosition = useRef<number | null>(null);
 
   useEffect(() => {
     if (inputRef.current) {
-      const selectionStart = inputRef.current.selectionStart;
-      const selectionEnd = inputRef.current.selectionEnd;
-      inputRef.current.setSelectionRange(selectionStart, selectionEnd);
-
-      if (document.activeElement !== inputRef.current) {
-        inputRef.current.scrollLeft = inputRef.current.scrollWidth;
+      inputRef.current.focus();
+      if (lastCursorPosition.current !== null) {
+        inputRef.current.setSelectionRange(lastCursorPosition.current, lastCursorPosition.current);
+      } else {
+        inputRef.current.setSelectionRange(value.length, value.length);
       }
     }
   }, [value]);
@@ -65,17 +66,35 @@ export const CalculatorDisplay = ({ value, onChange }: CalculatorDisplayProps) =
     onChange(newValue);
   };
 
+  const handleSelect = (event: React.SyntheticEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement;
+    lastCursorPosition.current = target.selectionStart;
+    onCursorChange(target.selectionStart);
+  };
+
+  const handleFocus = () => {
+    if (lastCursorPosition.current !== null) {
+      inputRef.current?.setSelectionRange(lastCursorPosition.current, lastCursorPosition.current);
+    } else {
+      inputRef.current?.setSelectionRange(value.length, value.length);
+    }
+    onCursorChange(inputRef.current?.selectionStart || null);
+  };
+
   return (
     <Display role="status" aria-label="Calculator display" aria-live="polite" aria-atomic="true">
       <StyledInput
         inputRef={inputRef}
         value={value}
         onChange={handleChange}
+        onSelect={handleSelect}
+        onFocus={handleFocus}
         disableUnderline
         fullWidth
         inputProps={{
           'aria-label': 'Calculator input',
           spellCheck: false,
+          autoFocus: true,
         }}
       />
     </Display>

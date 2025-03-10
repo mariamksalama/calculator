@@ -38,6 +38,8 @@ export const Calculator = () => {
     setIsHistoryOpen,
     handleControl,
     handleOperator,
+    cursorPosition,
+    setCursorPosition,
   } = useCalculator();
 
   const handleButtonClick = (buttonValue: string) => {
@@ -62,7 +64,7 @@ export const Calculator = () => {
     } else if (isOperator(buttonValue)) {
       handleOperator(buttonValue);
     } else {
-      updateDisplay(buttonValue);
+      updateDisplay(buttonValue, cursorPosition);
     }
   };
 
@@ -76,7 +78,11 @@ export const Calculator = () => {
 
   return (
     <StyledContainer role="application" aria-label="Calculator">
-      <CalculatorDisplay value={displayValue} onChange={handleDisplayChange} />
+      <CalculatorDisplay
+        value={displayValue}
+        onChange={handleDisplayChange}
+        onCursorChange={setCursorPosition}
+      />
       <NumberPad onClick={handleButtonClick} />
       <HistoryDialog onSelectExpression={handleHistorySelect} />
     </StyledContainer>

@@ -13,9 +13,11 @@ interface CalculatorContextType {
   setIsHistoryOpen: (open: boolean) => void;
   displayValue: string;
   setDisplayValue: (value: string) => void;
-  updateDisplay: (value: string) => void;
+  updateDisplay: (value: string, cursorPosition: number | null) => void;
   handleControl: (control: string) => void;
   handleOperator: (operator: string) => void;
+  cursorPosition: number | null;
+  setCursorPosition: (position: number | null) => void;
 }
 
 const CalculatorContext = createContext<CalculatorContextType | undefined>(undefined);
@@ -36,6 +38,7 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
   const [history, setHistory] = useState<CalculationHistory[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [displayValue, setDisplayValue] = useState('0');
+  const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
   const addToHistory = (expression: string, result: string) => {
     setHistory((prev) => {
@@ -73,17 +76,27 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
     const trimmedValue = displayValue.trimEnd();
     const newValue = trimmedValue + operator;
     setDisplayValue(newValue);
+    setCursorPosition(newValue.length);
   };
 
-  const updateDisplay = (value: string) => {
+  const updateDisplay = (value: string, position: number | null) => {
     if (value === '.' && displayValue.includes('.')) {
       return;
     }
 
     if (displayValue === '0' && value !== '.') {
       setDisplayValue(value);
+      setCursorPosition(value.length);
+    } else if (position !== null) {
+      setDisplayValue((prev) => {
+        const before = prev.slice(0, position);
+        const after = prev.slice(position);
+        return before + value + after;
+      });
+      setCursorPosition(position + 1);
     } else {
       setDisplayValue((prev) => prev + value);
+      setCursorPosition((prev) => (prev !== null ? prev + 1 : null));
     }
   };
 
@@ -99,6 +112,8 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
         updateDisplay,
         handleControl,
         handleOperator,
+        cursorPosition,
+        setCursorPosition,
       }}
     >
       {children}

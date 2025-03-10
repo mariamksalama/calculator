@@ -47,13 +47,20 @@ export const CalculatorButton = ({
   variant = 'number',
   className,
 }: CalculatorButtonProps) => {
+  const handleClick = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onClick();
+  };
+
   return (
     <StyledButton
       variant="contained"
-      onClick={onClick}
+      onClick={handleClick}
       buttonVariant={variant}
       value={value}
       className={className}
+      type="button"
     >
       {value}
     </StyledButton>
