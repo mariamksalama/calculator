@@ -51,6 +51,12 @@ export const decimalButton: ButtonConfig = {
   variant: 'number',
   ariaLabel: 'Decimal point',
 };
+export const isOperator = (char: string): boolean => {
+  return operatorButtons.some((button) => button.value === char);
+};
+export const isControl = (char: string): boolean => {
+  return controlButtons.some((button) => button.value === char);
+};
 
 export const getButtonColor = (variant: VariantTypes) => {
   switch (variant) {
