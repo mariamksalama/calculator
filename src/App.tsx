@@ -1,11 +1,21 @@
+import { Container } from '@mui/material';
 import './App.css';
-import { Typography } from '@mui/material';
+import { Calculator } from './components/calculator/calculator';
 
 function App() {
   return (
-    <>
-      <Typography variant="h1">Your calculator</Typography>
-    </>
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        padding: '2rem',
+      }}
+    >
+      <Calculator />
+    </Container>
   );
 }
 
