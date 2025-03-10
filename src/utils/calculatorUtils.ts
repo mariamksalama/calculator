@@ -70,7 +70,7 @@ export const calculateResult = (expression: string): string => {
     }
 
     return Number.isInteger(result) ? result.toString() : result.toFixed(8).replace(/\.?0+$/, '');
-  } catch (error) {
+  } catch {
     return 'Error';
   }
 };

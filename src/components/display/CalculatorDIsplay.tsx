@@ -65,7 +65,7 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
     const cursorPos = target.selectionStart ?? value.length;
     lastCursorPosition.current = cursorPos;
 
-    const newValue = target.value.replace(/[^0-9\s+\-×÷%\.]/g, '');
+    const newValue = target.value.replace(/[^0-9+\-×÷%.]/g, '');
     onChange(newValue);
   };
 

@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { colors, spacing } from '../../theme/designSystem';
+import { colors } from '../../theme/designSystem';
 
 interface BurgerMenuProps {
   onClick: () => void;

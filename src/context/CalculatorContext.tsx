@@ -38,7 +38,7 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
   const [history, setHistory] = useState<CalculationHistory[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [displayValue, setDisplayValue] = useState('0');
-  const [cursorPosition, setCursorPosition] = useState(1); // Always start at position 1 (after '0')
+  const [cursorPosition, setCursorPosition] = useState(1);
 
   const addToHistory = (expression: string, result: string) => {
     setHistory((prev) => {
@@ -70,7 +70,7 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
         setDisplayValue((prev) => (prev.startsWith('-') ? prev.slice(1) : '-' + prev));
         setCursorPosition((prev) => prev + 1);
         break;
-      case '%':
+      case '%': {
         const value = parseFloat(displayValue);
         if (!isNaN(value)) {
           const newValue = (value / 100).toString();
@@ -78,6 +78,7 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
           setCursorPosition(newValue.length);
         }
         break;
+      }
     }
   };
 

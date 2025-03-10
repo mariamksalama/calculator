@@ -1,6 +1,6 @@
 import { Button, styled } from '@mui/material';
 import { VariantTypes } from '../../types/buttonTypes';
-import { spacing, typography, colors, borderRadius } from '../../theme/designSystem';
+import { typography, colors, borderRadius } from '../../theme/designSystem';
 
 interface CalculatorButtonProps {
   value: string;

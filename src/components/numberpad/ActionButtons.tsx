@@ -26,7 +26,7 @@ interface ActionButtonsProps {
 }
 
 export const ActionButtons = ({ onClick }: ActionButtonsProps) => {
-  const [historyButton, equalsButton] = actionButtons;
+  const [equalsButton] = actionButtons;
   const { setIsHistoryOpen } = useCalculator();
 
   return (
