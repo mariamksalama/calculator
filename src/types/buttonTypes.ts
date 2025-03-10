@@ -1,1 +1,1 @@
-export type VariantTypes = 'number' | 'operator' | 'bracket' | 'clear' | 'decimal';
+export type VariantTypes = 'number' | 'operator' | 'control' | 'decimal';

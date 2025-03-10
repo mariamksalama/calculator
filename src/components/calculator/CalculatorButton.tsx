@@ -6,7 +6,6 @@ interface CalculatorButtonProps {
   value: string;
   onClick: () => void;
   variant: VariantTypes;
-  fullWidth?: boolean;
   className?: string;
 }
 
@@ -23,7 +22,17 @@ const StyledButton = styled(Button, {
   fontSize: '1rem',
   borderRadius: '100px',
   backgroundColor: getButtonColor(buttonVariant),
+  textTransform: 'none',
   color: '#fff',
+  fontWeight: '500',
+  display: 'flex',
+  fontFamily: 'system-ui, -apple-system, sans-serif',
+  '& .MuiButton-label': {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+  },
   '&:hover': {
     backgroundColor: buttonVariant === 'number' ? '#666' : '#ffb94a',
   },
