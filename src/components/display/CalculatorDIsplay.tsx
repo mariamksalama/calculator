@@ -14,7 +14,7 @@ const Display = styled(Box)({
 });
 export const CalculatorDisplay = ({ value = '0' }: CalculatorDisplayProps) => {
   return (
-    <Display role="textbox" aria-label="Calculator display" aria-live="polite">
+    <Display role="textbox" aria-label="Calculator display" aria-live="polite" aria-atomic="true">
       {value}
     </Display>
   );
