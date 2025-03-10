@@ -1,6 +1,6 @@
 import { Button, styled } from '@mui/material';
 import { VariantTypes } from '../../types/buttonTypes';
-import { getButtonColor } from '../../utils/buttonUtils';
+import { spacing, typography, colors, borderRadius } from '../../theme/designSystem';
 
 interface CalculatorButtonProps {
   value: string;
@@ -19,14 +19,12 @@ const StyledButton = styled(Button, {
   height: '50px',
   minWidth: '50px',
   width: value === '0' ? '120px' : '50px',
-  fontSize: '1rem',
-  borderRadius: '100px',
-  backgroundColor: getButtonColor(buttonVariant),
+  ...typography.button,
+  borderRadius: borderRadius.full,
+  backgroundColor: colors.button[buttonVariant],
   textTransform: 'none',
-  color: '#fff',
-  fontWeight: '500',
+  color: colors.text.primary,
   display: 'flex',
-  fontFamily: 'system-ui, -apple-system, sans-serif',
   '& .MuiButton-label': {
     display: 'flex',
     alignItems: 'center',
@@ -34,7 +32,7 @@ const StyledButton = styled(Button, {
     textAlign: 'center',
   },
   '&:hover': {
-    backgroundColor: buttonVariant === 'action' ? undefined : '#666',
+    backgroundColor: colors.button.hover[buttonVariant],
   },
   '&:focus': {
     outline: 'none',

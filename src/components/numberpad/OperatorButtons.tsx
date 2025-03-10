@@ -2,11 +2,12 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import { CalculatorButton } from './CalculatorButton';
 import { operatorButtons } from '../../utils/buttonUtils';
+import { spacing } from '../../theme/designSystem';
 
 const OperatorsGrid = styled(Box)({
   display: 'grid',
   gridArea: 'operators',
-  gap: '10px',
+  gap: spacing.md,
   justifyItems: 'center',
   alignContent: 'space-between',
 });

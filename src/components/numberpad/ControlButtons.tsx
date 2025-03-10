@@ -2,12 +2,13 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import { CalculatorButton } from './CalculatorButton';
 import { controlButtons } from '../../utils/buttonUtils';
+import { spacing } from '../../theme/designSystem';
 
 const ControlsRow = styled(Box)({
   display: 'grid',
   gridTemplateColumns: 'repeat(3, 1fr)',
   gridArea: 'controls',
-  gap: '10px',
+  gap: spacing.md,
   justifyItems: 'center',
   alignItems: 'center',
 });

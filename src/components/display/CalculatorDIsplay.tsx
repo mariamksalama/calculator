@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { Box, Input } from '@mui/material';
 import { useEffect, useRef } from 'react';
+import { spacing, typography, colors, borderRadius } from '../../theme/designSystem';
 
 interface CalculatorDisplayProps {
   value: string;
@@ -11,34 +12,30 @@ interface CalculatorDisplayProps {
 const Display = styled(Box)({
   width: '100%',
   height: '60px',
-  borderRadius: '10px',
-  marginBottom: '20px',
-  padding: '10px 15px',
+  borderRadius: borderRadius.md,
+  marginBottom: spacing.lg,
+  padding: `${spacing.sm} ${spacing.md}`,
   display: 'flex',
   alignItems: 'center',
-  color: 'white',
-  fontSize: '2rem',
-  fontFamily: 'monospace',
-  backgroundColor: 'transparent',
+  color: colors.text.primary,
+  ...typography.display,
 });
 
 const StyledInput = styled(Input)({
   width: '100%',
-  color: 'white',
-  fontSize: '2rem',
-  fontFamily: 'monospace',
+  color: colors.text.primary,
+  ...typography.display,
   padding: 0,
   textAlign: 'right',
-  caretColor: 'white',
+  caretColor: colors.text.primary,
   '&::before, &::after': {
     display: 'none',
   },
   '& input': {
     padding: 0,
     textAlign: 'right',
-    color: 'white',
-    fontSize: '2rem',
-    fontFamily: 'monospace',
+    color: colors.text.primary,
+    ...typography.display,
     cursor: 'text',
   },
   '&:hover': {

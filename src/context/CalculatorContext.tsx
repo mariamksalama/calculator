@@ -13,11 +13,11 @@ interface CalculatorContextType {
   setIsHistoryOpen: (open: boolean) => void;
   displayValue: string;
   setDisplayValue: (value: string) => void;
-  updateDisplay: (value: string, cursorPosition: number | null) => void;
+  updateDisplay: (value: string, position: number) => void;
   handleControl: (control: string) => void;
   handleOperator: (operator: string) => void;
-  cursorPosition: number | null;
-  setCursorPosition: (position: number | null) => void;
+  cursorPosition: number;
+  setCursorPosition: (position: number) => void;
 }
 
 const CalculatorContext = createContext<CalculatorContextType | undefined>(undefined);
@@ -38,7 +38,7 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
   const [history, setHistory] = useState<CalculationHistory[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [displayValue, setDisplayValue] = useState('0');
-  const [cursorPosition, setCursorPosition] = useState<number | null>(null);
+  const [cursorPosition, setCursorPosition] = useState(1); // Always start at position 1 (after '0')
 
   const addToHistory = (expression: string, result: string) => {
     setHistory((prev) => {
@@ -51,22 +51,31 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
     switch (control) {
       case 'ac':
         setDisplayValue('0');
+        setCursorPosition(1);
         break;
       case 'del':
-        if (displayValue == 'Error') {
+        if (displayValue === 'Error') {
           setDisplayValue('0');
+          setCursorPosition(1);
+        } else if (displayValue.length > 1) {
+          setDisplayValue((prev) => prev.slice(0, -1));
+          setCursorPosition((prev) => Math.max(1, prev - 1));
         } else {
-          setDisplayValue((prev) => (prev.length > 1 ? prev.slice(0, -1) : '0'));
+          setDisplayValue('0');
+          setCursorPosition(1);
         }
         break;
       case '+/-':
         if (displayValue === '0') return;
         setDisplayValue((prev) => (prev.startsWith('-') ? prev.slice(1) : '-' + prev));
+        setCursorPosition((prev) => prev + 1);
         break;
       case '%':
         const value = parseFloat(displayValue);
         if (!isNaN(value)) {
-          setDisplayValue((value / 100).toString());
+          const newValue = (value / 100).toString();
+          setDisplayValue(newValue);
+          setCursorPosition(newValue.length);
         }
         break;
     }
@@ -79,25 +88,26 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
     setCursorPosition(newValue.length);
   };
 
-  const updateDisplay = (value: string, position: number | null) => {
+  const updateDisplay = (value: string, position: number) => {
+    // Prevent multiple decimal points
     if (value === '.' && displayValue.includes('.')) {
       return;
     }
 
+    // Handle initial state
     if (displayValue === '0' && value !== '.') {
       setDisplayValue(value);
       setCursorPosition(value.length);
-    } else if (position !== null) {
-      setDisplayValue((prev) => {
-        const before = prev.slice(0, position);
-        const after = prev.slice(position);
-        return before + value + after;
-      });
-      setCursorPosition(position + 1);
-    } else {
-      setDisplayValue((prev) => prev + value);
-      setCursorPosition((prev) => (prev !== null ? prev + 1 : null));
+      return;
     }
+
+    // Insert at cursor position
+    setDisplayValue((prev) => {
+      const before = prev.slice(0, position);
+      const after = prev.slice(position);
+      return before + value + after;
+    });
+    setCursorPosition(position + 1);
   };
 
   return (

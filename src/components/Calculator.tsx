@@ -7,20 +7,22 @@ import { calculateResult } from '../utils/calculatorUtils';
 import { HistoryDialog } from './history/HistoryDialog';
 import { useCalculator } from '../context/CalculatorContext';
 import { isControl, isOperator } from '../utils/buttonUtils';
+import { borderRadius, shadows, spacing, colors } from '../theme/designSystem';
 
 const StyledContainer = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '2rem',
-  borderRadius: '25px',
-  backgroundColor: 'black',
+  padding: spacing.xl,
+  borderRadius: borderRadius.xl,
+  backgroundColor: colors.background.primary,
   width: '320px',
   height: '500px',
   boxSizing: 'border-box',
   position: 'relative',
   overflow: 'hidden',
+  boxShadow: shadows.lg,
   '@media (min-width: 400px)': {
     width: '360px',
   },

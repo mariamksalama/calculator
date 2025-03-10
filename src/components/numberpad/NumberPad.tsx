@@ -4,6 +4,7 @@ import { ControlButtons } from './ControlButtons';
 import { NumberButtons } from './NumberButtons';
 import { OperatorButtons } from './OperatorButtons';
 import { ActionButtons } from './ActionButtons';
+import { spacing } from '../../theme/designSystem';
 
 const CalculatorGrid = styled(Box)({
   display: 'grid',
@@ -15,7 +16,7 @@ const CalculatorGrid = styled(Box)({
     "actions actions"
   `,
   width: '100%',
-  gap: '10px',
+  gap: spacing.md,
   height: '100%',
 });
 

@@ -3,14 +3,18 @@ import { Box } from '@mui/material';
 import { CalculatorButton } from './CalculatorButton';
 import { actionButtons } from '../../utils/buttonUtils';
 import { useCalculator } from '../../context/CalculatorContext';
+import { BurgerMenu } from './BurgerMenu';
+import { spacing } from '../../theme/designSystem';
 
 const ActionsRow = styled(Box)({
   display: 'grid',
   gridTemplateColumns: '1fr 2fr 1fr',
   gridArea: 'actions',
-  gap: '10px',
+  gap: spacing.md,
   '& > :first-of-type': {
     justifySelf: 'start',
+    display: 'flex',
+    alignItems: 'center',
   },
   '& > :last-child': {
     justifySelf: 'center',
@@ -28,7 +32,7 @@ export const ActionButtons = ({ onClick }: ActionButtonsProps) => {
   return (
     <ActionsRow>
       <Box>
-        <CalculatorButton {...historyButton} onClick={() => setIsHistoryOpen(true)} />
+        <BurgerMenu onClick={() => setIsHistoryOpen(true)} />
       </Box>
       <Box />
       <Box>
