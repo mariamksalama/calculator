@@ -6,7 +6,7 @@ import { spacing, typography, colors, borderRadius } from '../../theme/designSys
 interface CalculatorDisplayProps {
   value: string;
   onChange: (value: string) => void;
-  onCursorChange: (position: number | null) => void;
+  onCursorChange: (position: number) => void;
 }
 
 const Display = styled(Box)({
@@ -72,7 +72,9 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
   const handleSelect = (event: React.SyntheticEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     lastCursorPosition.current = target.selectionStart;
-    onCursorChange(target.selectionStart);
+    if (target.selectionStart !== null) {
+      onCursorChange(target.selectionStart);
+    }
   };
 
   const handleFocus = () => {
