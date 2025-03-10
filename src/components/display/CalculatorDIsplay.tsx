@@ -18,6 +18,8 @@ const Display = styled(Box)({
   display: 'flex',
   alignItems: 'center',
   color: colors.text.primary,
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
   ...typography.display,
 });
 
@@ -37,6 +39,9 @@ const StyledInput = styled(Input)({
     color: colors.text.primary,
     ...typography.display,
     cursor: 'text',
+    whiteSpace: 'nowrap',
+    overflowX: 'auto',
+    display: 'block',
   },
   '&:hover': {
     cursor: 'text',
@@ -48,18 +53,19 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
   const lastCursorPosition = useRef<number | null>(null);
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      if (lastCursorPosition.current !== null) {
-        inputRef.current.setSelectionRange(lastCursorPosition.current, lastCursorPosition.current);
-      } else {
-        inputRef.current.setSelectionRange(value.length, value.length);
-      }
+    if (inputRef.current && lastCursorPosition.current !== null) {
+      const newCursorPosition = lastCursorPosition.current + 1;
+      inputRef.current.setSelectionRange(newCursorPosition, newCursorPosition);
+      inputRef.current.scrollLeft = inputRef.current.scrollWidth; // Keep cursor in view
     }
   }, [value]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value.replace(/[^0-9\s+\-×÷%\.]/, '');
+    const target = event.target;
+    const cursorPos = target.selectionStart ?? value.length;
+    lastCursorPosition.current = cursorPos;
+
+    const newValue = target.value.replace(/[^0-9\s+\-×÷%\.]/g, '');
     onChange(newValue);
   };
 
@@ -70,12 +76,11 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
   };
 
   const handleFocus = () => {
-    if (lastCursorPosition.current !== null) {
-      inputRef.current?.setSelectionRange(lastCursorPosition.current, lastCursorPosition.current);
-    } else {
-      inputRef.current?.setSelectionRange(value.length, value.length);
+    if (inputRef.current) {
+      const cursorPos = lastCursorPosition.current ?? value.length;
+      inputRef.current.setSelectionRange(cursorPos, cursorPos);
+      onCursorChange(cursorPos);
     }
-    onCursorChange(inputRef.current?.selectionStart || null);
   };
 
   return (
