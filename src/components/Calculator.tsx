@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
 import { CalculatorDisplay } from './display/CalculatorDIsplay';
@@ -9,7 +9,7 @@ import { useCalculator } from '../context/CalculatorContext';
 import { isControl, isOperator } from '../utils/buttonUtils';
 import { borderRadius, shadows, spacing, colors } from '../theme/designSystem';
 
-const StyledContainer = styled(Box)({
+const StyledContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -17,19 +17,19 @@ const StyledContainer = styled(Box)({
   padding: spacing.xl,
   borderRadius: borderRadius.xl,
   backgroundColor: colors.background.primary,
-  width: '320px',
   height: '500px',
+  maxWidth: '450px',
   boxSizing: 'border-box',
   position: 'relative',
   overflow: 'hidden',
   boxShadow: shadows.lg,
-  '@media (min-width: 400px)': {
-    width: '360px',
+  [theme.breakpoints.down('sm')]: {
+    width: '80%',
   },
-  '@media (min-width: 560px)': {
-    width: '400px',
+  [theme.breakpoints.up('md')]: {
+    width: '60%',
   },
-});
+}));
 
 export const Calculator = () => {
   const {

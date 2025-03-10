@@ -1,22 +1,23 @@
-import { Container } from '@mui/material';
+import { Box, Container, styled } from '@mui/material';
 import './App.css';
 import { Calculator } from './components/Calculator';
 import { CalculatorProvider } from './context/CalculatorContext';
 
 function App() {
+  const AppContainer = styled(Container)({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    overflow: 'hidden',
+    padding: '1rem',
+    boxSizing: 'border-box',
+  });
   return (
     <CalculatorProvider>
-      <Container
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '100vh',
-          padding: '2rem',
-        }}
-      >
+      <AppContainer>
         <Calculator />
-      </Container>
+      </AppContainer>
     </CalculatorProvider>
   );
 }
