@@ -21,7 +21,6 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   maxWidth: '450px',
   boxSizing: 'border-box',
   position: 'relative',
-  overflow: 'hidden',
   boxShadow: shadows.lg,
   [theme.breakpoints.down('sm')]: {
     width: '100%',
@@ -37,6 +36,7 @@ export const Calculator = () => {
     setDisplayValue,
     updateDisplay,
     addToHistory,
+    isHistoryOpen,
     setIsHistoryOpen,
     handleControl,
     handleOperator,
@@ -86,7 +86,7 @@ export const Calculator = () => {
         onCursorChange={setCursorPosition}
       />
       <NumberPad onClick={handleButtonClick} />
-      <HistoryDialog onSelectExpression={handleHistorySelect} />
+      {isHistoryOpen && <HistoryDialog onSelectExpression={handleHistorySelect} />}
     </StyledContainer>
   );
 };
