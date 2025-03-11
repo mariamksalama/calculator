@@ -30,6 +30,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
+// Main calculator component that orchestrates display, number pad, and history functionality
 export const Calculator = () => {
   const {
     displayValue,
@@ -44,6 +45,7 @@ export const Calculator = () => {
     setCursorPosition,
   } = useCalculator();
 
+  // Handles all button clicks (numbers, operators, controls, and special functions)
   const handleButtonClick = (buttonValue: string) => {
     if (buttonValue === '=') {
       if (

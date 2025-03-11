@@ -1,5 +1,19 @@
 import { isOperator } from './buttonUtils';
 
+const operatorPrecedence = (op: string): number => {
+  switch (op) {
+    case '+':
+    case '-':
+      return 1;
+    case '×':
+    case '÷':
+    case '%':
+      return 2;
+    default:
+      return 0;
+  }
+};
+
 const performOperation = (a: number, b: number, operation: string): number => {
   switch (operation) {
     case '+':
@@ -52,22 +66,41 @@ export const calculateResult = (expression: string): string => {
     if (parts.length === 0) return '0';
     if (parts.length === 1) return parts[0];
 
-    let result = parseFloat(parts[0]);
+    // First pass: handle multiplication, division, and modulus (higher precedence)
+    let numberStack: number[] = [];
+    let operatorStack: string[] = [];
 
-    for (let i = 1; i < parts.length; i += 2) {
-      const operation = parts[i];
-      const nextNumber = parseFloat(parts[i + 1]);
-      if (!isOperator(operation) || isNaN(nextNumber)) {
-        throw new Error('Invalid expression');
-      }
+    for (let i = 0; i < parts.length; i++) {
+      const token = parts[i];
 
-      result = performOperation(result, nextNumber, operation);
-
-      if (isNaN(result) || !isFinite(result)) {
-        return 'Error';
+      if (isOperator(token)) {
+        // Handle operators with higher precedence (×, ÷, %)
+        while (
+          operatorStack.length > 0 &&
+          operatorPrecedence(operatorStack[operatorStack.length - 1]) >= operatorPrecedence(token)
+        ) {
+          const operator = operatorStack.pop()!;
+          const b = numberStack.pop()!;
+          const a = numberStack.pop()!;
+          const result = performOperation(a, b, operator);
+          numberStack.push(result);
+        }
+        operatorStack.push(token);
+      } else {
+        numberStack.push(parseFloat(token));
       }
     }
 
+    // Second pass: handle addition and subtraction (lower precedence)
+    while (operatorStack.length > 0) {
+      const operator = operatorStack.pop()!;
+      const b = numberStack.pop()!;
+      const a = numberStack.pop()!;
+      const result = performOperation(a, b, operator);
+      numberStack.push(result);
+    }
+
+    const result = numberStack.pop()!;
     return Number.isInteger(result) ? result.toString() : result.toFixed(8).replace(/\.?0+$/, '');
   } catch {
     return 'Error';

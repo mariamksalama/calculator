@@ -34,12 +34,14 @@ interface CalculatorProviderProps {
   children: ReactNode;
 }
 
+// Manages calculator state and operations
 export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children }) => {
   const [history, setHistory] = useState<CalculationHistory[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [displayValue, setDisplayValue] = useState('0');
   const [cursorPosition, setCursorPosition] = useState(1);
 
+  // Add calculation to history, keeping last 10 entries
   const addToHistory = (expression: string, result: string) => {
     setHistory((prev) => {
       const newHistory = [{ expression, result, timestamp: new Date() }, ...prev].slice(0, 10);
@@ -47,6 +49,7 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
     });
   };
 
+  // Handle special operations (AC, DEL, +/-, %)
   const handleControl = (control: string) => {
     switch (control) {
       case 'ac':
@@ -82,6 +85,7 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
     }
   };
 
+  // Handle mathematical operators (+, -, ×, ÷)
   const handleOperator = (operator: string) => {
     const trimmedValue = displayValue.trimEnd();
     const newValue = trimmedValue + operator;
@@ -89,6 +93,7 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
     setCursorPosition(newValue.length);
   };
 
+  // Update display value with new input at cursor position
   const updateDisplay = (value: string, position: number) => {
     // Prevent multiple decimal points
     if (value === '.' && displayValue.includes('.')) {

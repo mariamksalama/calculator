@@ -6,6 +6,7 @@ import { OperatorButtons } from './OperatorButtons';
 import { ActionButtons } from './ActionButtons';
 import { spacing } from '../../theme/designSystem';
 
+// Grid layout for calculator buttons, organized into controls, numbers, operators, and actions
 const CalculatorGrid = styled(Box)({
   display: 'grid',
   gridTemplateColumns: '3fr 1fr',
@@ -25,6 +26,7 @@ interface NumberPadProps {
   onClick: (value: string, isOperator?: boolean) => void;
 }
 
+// Main number pad component that combines all button groups
 export const NumberPad = ({ onClick }: NumberPadProps) => {
   const handleOperatorClick = (value: string) => onClick(value, true);
   const handleButtonClick = (value: string) => onClick(value);

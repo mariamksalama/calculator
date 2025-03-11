@@ -57,6 +57,7 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
   const lastCursorPosition = useRef<number | null>(null);
   const [isManuallyScrolled, setIsManuallyScrolled] = useState(false);
 
+  // Auto-scroll to cursor position when value changes
   useEffect(() => {
     const inputElement = inputRef.current;
     if (!inputElement || isManuallyScrolled) return;
@@ -67,6 +68,7 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
     }
   }, [value, isManuallyScrolled]);
 
+  // Filter input and handle cursor position
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
     const cursorPos = target.selectionStart ?? value.length;
@@ -83,6 +85,7 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
     }
   };
 
+  // Track cursor position changes
   const handleSelect = (event: React.SyntheticEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     lastCursorPosition.current = target.selectionStart;
@@ -91,6 +94,7 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
     }
   };
 
+  // Detect manual scrolling to prevent auto-scroll
   const handleScroll = useCallback(() => {
     const inputElement = inputRef.current;
     if (inputElement) {
