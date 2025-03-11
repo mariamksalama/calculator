@@ -43,6 +43,7 @@ const StyledInput = styled(Input)({
     overflowX: 'auto',
     display: 'block',
     touchAction: 'pan-x',
+    webkitOverflowScrolling: 'touch',
   },
   '&:hover': {
     cursor: 'text',
