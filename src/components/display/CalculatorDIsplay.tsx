@@ -29,7 +29,7 @@ const StyledInput = styled(Input)({
   padding: 0,
   textAlign: 'right',
   caretColor: colors.text.primary,
-  touchAction: 'pan-x',
+  touchAction: 'auto',
   webkitOverflowScrolling: 'touch',
   overflowX: 'auto',
   '&::before, &::after': {
@@ -44,7 +44,7 @@ const StyledInput = styled(Input)({
     whiteSpace: 'nowrap',
     overflowX: 'auto',
     display: 'block',
-    touchAction: 'pan-x',
+    touchAction: 'auto',
     webkitOverflowScrolling: 'touch',
   },
   '&:hover': {
