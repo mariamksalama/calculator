@@ -24,7 +24,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   overflow: 'hidden',
   boxShadow: shadows.lg,
   [theme.breakpoints.down('sm')]: {
-    width: '80%',
+    width: '100%',
   },
   [theme.breakpoints.up('md')]: {
     width: '60%',
