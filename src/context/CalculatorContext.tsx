@@ -1,47 +1,25 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+// This module provides the global state management for the calculator application.
+// It manages the calculator's display value, history, cursor position, and operations
 
-interface CalculationHistory {
-  expression: string;
-  result: string;
-  timestamp: Date;
-}
+import { createContext, useState, ReactNode } from 'react';
+import { CalculatorContextType, CalculationHistory } from '../types/calculatorContextTypes';
 
-interface CalculatorContextType {
-  history: CalculationHistory[];
-  addToHistory: (expression: string, result: string) => void;
-  isHistoryOpen: boolean;
-  setIsHistoryOpen: (open: boolean) => void;
-  displayValue: string;
-  setDisplayValue: (value: string) => void;
-  updateDisplay: (value: string, position: number) => void;
-  handleControl: (control: string) => void;
-  handleOperator: (operator: string) => void;
-  cursorPosition: number;
-  setCursorPosition: (position: number) => void;
-}
-
+// Create context with undefined default value
 const CalculatorContext = createContext<CalculatorContextType | undefined>(undefined);
-
-export const useCalculator = () => {
-  const context = useContext(CalculatorContext);
-  if (!context) {
-    throw new Error('useCalculator must be used within a CalculatorProvider');
-  }
-  return context;
-};
 
 interface CalculatorProviderProps {
   children: ReactNode;
 }
 
-// Manages calculator state and operations
-export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children }) => {
+export function CalculatorProvider({ children }: CalculatorProviderProps) {
+  // State management
   const [history, setHistory] = useState<CalculationHistory[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [displayValue, setDisplayValue] = useState('0');
   const [cursorPosition, setCursorPosition] = useState(1);
 
-  // Add calculation to history, keeping last 10 entries
+  // Adds a calculation to history, maintaining last 10 entries
+
   const addToHistory = (expression: string, result: string) => {
     setHistory((prev) => {
       const newHistory = [{ expression, result, timestamp: new Date() }, ...prev].slice(0, 10);
@@ -49,14 +27,13 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
     });
   };
 
-  // Handle special operations (AC, DEL, +/-, %)
   const handleControl = (control: string) => {
     switch (control) {
-      case 'ac':
+      case 'ac': // Clear all
         setDisplayValue('0');
         setCursorPosition(1);
         break;
-      case 'del':
+      case 'del': // Delete last character
         if (displayValue === 'Error') {
           setDisplayValue('0');
           setCursorPosition(1);
@@ -68,12 +45,12 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
           setCursorPosition(1);
         }
         break;
-      case '+/-':
+      case '+/-': // Toggle negative/positive
         if (displayValue === '0') return;
         setDisplayValue((prev) => (prev.startsWith('-') ? prev.slice(1) : '-' + prev));
         setCursorPosition((prev) => prev + 1);
         break;
-      case '%': {
+      case '%': // Convert to percentage
         const value = parseFloat(displayValue);
         if (!isNaN(value)) {
           const newValue = (value / 100).toString();
@@ -81,19 +58,27 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
           setCursorPosition(newValue.length);
         }
         break;
-      }
     }
   };
 
-  // Handle mathematical operators (+, -, ×, ÷)
+  //  Handles mathematical operators
+
   const handleOperator = (operator: string) => {
+    // Special case for minus sign at the start
+    if (operator === '-' && displayValue === '0') {
+      setDisplayValue('-');
+      setCursorPosition(1);
+      return;
+    }
+
     const trimmedValue = displayValue.trimEnd();
     const newValue = trimmedValue + operator;
     setDisplayValue(newValue);
     setCursorPosition(newValue.length);
   };
 
-  // Update display value with new input at cursor position
+  // Updates display value with new input at specified cursor position
+
   const updateDisplay = (value: string, position: number) => {
     // Prevent multiple decimal points
     if (value === '.' && displayValue.includes('.')) {
@@ -135,4 +120,7 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
       {children}
     </CalculatorContext.Provider>
   );
-};
+}
+
+// Export context for use in hook
+export { CalculatorContext };

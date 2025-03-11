@@ -5,9 +5,9 @@ import { CalculatorDisplay } from './display/CalculatorDIsplay';
 import { NumberPad } from './numberpad/NumberPad';
 import { calculateResult } from '../utils/calculatorUtils';
 import { HistoryDialog } from './history/HistoryDialog';
-import { useCalculator } from '../context/CalculatorContext';
 import { isControl, isOperator } from '../utils/buttonUtils';
 import { borderRadius, shadows, spacing, colors } from '../theme/designSystem';
+import { useCalculator } from '../hooks/useCalculator';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -57,7 +57,7 @@ export const Calculator = () => {
       ) {
         const result = calculateResult(displayValue);
         setDisplayValue(result);
-        if (result !== 'Error') {
+        if (!result.includes('Error') && !result.includes('Nan')) {
           addToHistory(displayValue, result);
         }
       }

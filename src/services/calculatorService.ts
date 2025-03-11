@@ -1,18 +1,14 @@
-type Operation = '+' | '-' | '×' | '÷';
+import { isOperator } from '../utils/buttonUtils';
 
-const isOperation = (char: string): char is Operation => {
-  return ['+', '-', '×', '÷'].includes(char);
-};
-
-const performOperation = (a: number, b: number, operation: Operation): number => {
+const performOperation = (a: number, b: number, operation: string): number => {
   switch (operation) {
     case '+':
       return a + b;
     case '-':
       return a - b;
-    case '×':
+    case '*':
       return a * b;
-    case '÷':
+    case '/':
       return b !== 0 ? a / b : NaN;
     default:
       return NaN;
@@ -25,13 +21,13 @@ const splitExpression = (expression: string): string[] => {
 
   for (let i = 0; i < expression.length; i++) {
     const char = expression[i];
-    if (isOperation(char)) {
+    if (isOperator(char)) {
       if (currentNumber) {
         result.push(currentNumber);
         currentNumber = '';
       }
       // Handle negative numbers
-      if (char === '-' && (i === 0 || isOperation(expression[i - 1]))) {
+      if (char === '-' && (i === 0 || isOperator(expression[i - 1]))) {
         currentNumber = '-';
       } else {
         result.push(char);
@@ -62,7 +58,7 @@ export const calculateResult = (expression: string): string => {
       const operation = parts[i];
       const nextNumber = parseFloat(parts[i + 1]);
 
-      if (!isOperation(operation) || isNaN(nextNumber)) {
+      if (!isOperator(operation) || isNaN(nextNumber)) {
         throw new Error('Invalid expression');
       }
 

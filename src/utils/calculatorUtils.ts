@@ -1,28 +1,24 @@
 import { isOperator } from './buttonUtils';
 
-const operatorPrecedence = (op: string): number => {
-  switch (op) {
-    case '+':
-    case '-':
-      return 1;
-    case '×':
-    case '÷':
-    case '%':
-      return 2;
-    default:
-      return 0;
-  }
+// Define operators and their precedence levels
+const OPERATOR_PRECEDENCE: Record<string, number> = {
+  '+': 1,
+  '-': 1,
+  '*': 2,
+  '/': 2,
+  '%': 2,
 };
 
-const performOperation = (a: number, b: number, operation: string): number => {
-  switch (operation) {
+// Perform arithmetic operations
+const performOperation = (a: number, b: number, operator: string): number => {
+  switch (operator) {
     case '+':
       return a + b;
     case '-':
       return a - b;
-    case '×':
+    case '*':
       return a * b;
-    case '÷':
+    case '/':
       return b !== 0 ? a / b : NaN;
     case '%':
       return b !== 0 ? a % b : NaN;
@@ -31,80 +27,89 @@ const performOperation = (a: number, b: number, operation: string): number => {
   }
 };
 
-const splitExpression = (expression: string): string[] => {
-  const result: string[] = [];
+// Format number to remove trailing zeros
+const formatNumber = (num: number): string => {
+  if (!Number.isFinite(num)) return 'Error';
+  return Number.isInteger(num) ? num.toString() : num.toFixed(8).replace(/\.?0+$/, '');
+};
+
+// Split expression into tokens while preserving negative numbers
+const tokenizeExpression = (expression: string): string[] => {
+  const tokens: string[] = [];
   let currentNumber = '';
+  let isNegative = false;
 
   for (let i = 0; i < expression.length; i++) {
     const char = expression[i];
+
+    if (char === '-' && (i === 0 || isOperator(expression[i - 1]))) {
+      isNegative = true;
+      continue;
+    }
+
     if (isOperator(char)) {
       if (currentNumber) {
-        result.push(currentNumber);
+        tokens.push(isNegative ? '-' + currentNumber : currentNumber);
         currentNumber = '';
+        isNegative = false;
       }
-      if (char === '-' && (i === 0 || isOperator(expression[i - 1]))) {
-        currentNumber = '-';
-      } else {
-        result.push(char);
-      }
+      tokens.push(char);
     } else {
       currentNumber += char;
     }
   }
 
   if (currentNumber) {
-    result.push(currentNumber);
+    tokens.push(isNegative ? '-' + currentNumber : currentNumber);
   }
 
-  return result;
+  return tokens;
 };
 
 export const calculateResult = (expression: string): string => {
   try {
-    const parts = splitExpression(expression);
+    const tokens = tokenizeExpression(expression);
+    if (tokens.length === 0) return '0';
+    if (tokens.length === 1) return tokens[0];
 
-    if (parts.length === 0) return '0';
-    if (parts.length === 1) return parts[0];
+    const numbers: number[] = [];
+    const operators: string[] = [];
 
-    // First pass: handle multiplication, division, and modulus (higher precedence)
-    let numberStack: number[] = [];
-    let operatorStack: string[] = [];
-
-    for (let i = 0; i < parts.length; i++) {
-      const token = parts[i];
-
+    // Process each token
+    tokens.forEach((token) => {
       if (isOperator(token)) {
-        // Handle operators with higher precedence (×, ÷, %)
         while (
-          operatorStack.length > 0 &&
-          operatorPrecedence(operatorStack[operatorStack.length - 1]) >= operatorPrecedence(token)
+          operators.length > 0 &&
+          OPERATOR_PRECEDENCE[operators[operators.length - 1]] >= OPERATOR_PRECEDENCE[token]
         ) {
-          const operator = operatorStack.pop()!;
-          const b = numberStack.pop()!;
-          const a = numberStack.pop()!;
-          const result = performOperation(a, b, operator);
-          numberStack.push(result);
+          const operator = operators.pop()!;
+          const b = numbers.pop()!;
+          const a = numbers.pop()!;
+          numbers.push(performOperation(a, b, operator));
         }
-        operatorStack.push(token);
+        operators.push(token);
       } else {
-        numberStack.push(parseFloat(token));
+        numbers.push(parseFloat(token));
       }
+    });
+
+    // Process remaining operators
+    while (operators.length > 0) {
+      const operator = operators.pop()!;
+      const b = numbers.pop()!;
+      const a = numbers.pop()!;
+      numbers.push(performOperation(a, b, operator));
     }
 
-    // Second pass: handle addition and subtraction (lower precedence)
-    while (operatorStack.length > 0) {
-      const operator = operatorStack.pop()!;
-      const b = numberStack.pop()!;
-      const a = numberStack.pop()!;
-      const result = performOperation(a, b, operator);
-      numberStack.push(result);
-    }
-
-    const result = numberStack.pop()!;
-    return Number.isInteger(result) ? result.toString() : result.toFixed(8).replace(/\.?0+$/, '');
+    return formatNumber(numbers[0]);
   } catch {
     return 'Error';
   }
+};
+
+// Check if expression ends with an operator
+const endsWithOperator = (value: string): boolean => {
+  return /[+\-*/%]$/.test(value);
 };
 
 export const handleCalculatorInput = (
@@ -112,6 +117,7 @@ export const handleCalculatorInput = (
   buttonValue: string,
   isOperator?: boolean
 ): string => {
+  // Handle special operations
   switch (buttonValue) {
     case 'ac':
       return '0';
@@ -120,22 +126,19 @@ export const handleCalculatorInput = (
     case '+/-':
       if (currentValue === '0') return currentValue;
       return currentValue.startsWith('-') ? currentValue.slice(1) : '-' + currentValue;
-    default:
-      if (currentValue === '0' && !isOperator) return buttonValue;
-
-      if (isOperator) {
-        if (
-          currentValue.endsWith('+') ||
-          currentValue.endsWith('-') ||
-          currentValue.endsWith('×') ||
-          currentValue.endsWith('÷') ||
-          currentValue.endsWith('%')
-        ) {
-          return currentValue.slice(0, -1) + buttonValue;
-        }
-        return currentValue + buttonValue;
-      }
-
-      return currentValue + buttonValue;
   }
+
+  // Handle regular input
+  if (currentValue === '0') {
+    if (buttonValue === '-') return '-';
+    if (!isOperator) return buttonValue;
+  }
+
+  if (isOperator) {
+    return endsWithOperator(currentValue)
+      ? currentValue.slice(0, -1) + buttonValue
+      : currentValue + buttonValue;
+  }
+
+  return currentValue + buttonValue;
 };

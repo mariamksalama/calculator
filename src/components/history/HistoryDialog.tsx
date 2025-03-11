@@ -1,7 +1,7 @@
 import { Box, IconButton, List, ListItem } from '@mui/material';
 import { Close } from '@mui/icons-material';
-import { useCalculator } from '../../context/CalculatorContext';
 import { styled } from '@mui/material/styles';
+import { useCalculator } from '../../hooks/useCalculator';
 
 const HistoryContainer = styled(Box)(({ open }: { open: boolean }) => ({
   position: 'absolute',

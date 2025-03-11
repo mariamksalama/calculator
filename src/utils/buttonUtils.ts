@@ -14,8 +14,8 @@ export const controlButtons: ButtonConfig[] = [
 
 export const operatorButtons: ButtonConfig[] = [
   { value: '%', variant: 'operator', ariaLabel: 'Modulos' },
-  { value: '÷', variant: 'operator', ariaLabel: 'Divide' },
-  { value: '×', variant: 'operator', ariaLabel: 'Multiply' },
+  { value: '/', variant: 'operator', ariaLabel: 'Divide' },
+  { value: '*', variant: 'operator', ariaLabel: 'Multiply' },
   { value: '-', variant: 'operator', ariaLabel: 'Subtract' },
   { value: '+', variant: 'operator', ariaLabel: 'Add' },
 ];

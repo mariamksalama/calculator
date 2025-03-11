@@ -51,11 +51,10 @@ export const colors = {
     action: '#E46962',
     hover: {
       number: '#666666',
-      operator: '#FFB340',
+      operator: '#F3B58B',
       control: '#C7C7CC',
       decimal: '#666666',
-      action: '#C7C7CC',
-      equals: '#FFB340',
+      action: '#F3B58B',
     },
   },
 } as const;

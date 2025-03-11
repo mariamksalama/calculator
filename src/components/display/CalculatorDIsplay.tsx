@@ -9,7 +9,7 @@ interface CalculatorDisplayProps {
   onCursorChange?: (cursorPosition: number) => void;
 }
 
-// Styled component for the display container
+// Styled container for the calculator display
 const Display = styled(Box)({
   width: '100%',
   height: '60px',
@@ -24,7 +24,6 @@ const Display = styled(Box)({
   ...typography.display,
 });
 
-// Styled component for the input field
 const StyledInput = styled(Input)({
   width: '100%',
   color: colors.text.primary,
@@ -68,24 +67,17 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
     }
   }, [value, isManuallyScrolled]);
 
-  // Filter input and handle cursor position
+  // Handles input changes and filters out invalid characters
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
     const cursorPos = target.selectionStart ?? value.length;
     lastCursorPosition.current = cursorPos;
 
-    const newValue = target.value.replace(/[^0-9+\-×÷%.]/g, '');
+    const newValue = target.value.replace(/[^0-9+\-*/%.]/g, '');
     onChange(newValue);
-
-    if (cursorPos === target.value.length) {
-      const inputElement = inputRef.current;
-      if (inputElement) {
-        inputElement.scrollLeft = inputElement.scrollWidth;
-      }
-    }
   };
 
-  // Track cursor position changes
+  // Handles text selection and cursor position changes
   const handleSelect = (event: React.SyntheticEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     lastCursorPosition.current = target.selectionStart;
@@ -94,16 +86,17 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
     }
   };
 
-  // Detect manual scrolling to prevent auto-scroll
+  // Tracks manual horizontal scrolling
   const handleScroll = useCallback(() => {
     const inputElement = inputRef.current;
     if (inputElement) {
       const isAtRightmost =
-        inputElement.scrollLeft + inputElement.clientWidth >= inputElement.scrollWidth;
+        inputElement.scrollLeft + inputElement.clientWidth + 50 >= inputElement.scrollWidth;
       setIsManuallyScrolled(!isAtRightmost);
     }
   }, []);
 
+  // Set up scroll event listener
   useEffect(() => {
     const inputElement = inputRef.current;
     if (inputElement) {

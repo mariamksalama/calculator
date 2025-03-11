@@ -2,9 +2,9 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import { CalculatorButton } from './CalculatorButton';
 import { actionButtons } from '../../utils/buttonUtils';
-import { useCalculator } from '../../context/CalculatorContext';
 import { BurgerMenu } from './BurgerMenu';
 import { spacing } from '../../theme/designSystem';
+import { useCalculator } from '../../hooks/useCalculator';
 
 const ActionsRow = styled(Box)({
   display: 'grid',
