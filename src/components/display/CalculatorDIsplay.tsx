@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Input } from '@mui/material';
 import { spacing, typography, colors, borderRadius } from '../../theme/designSystem';
@@ -52,9 +52,11 @@ const StyledInput = styled(Input)({
 export const CalculatorDisplay = ({ value, onChange, onCursorChange }: CalculatorDisplayProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const lastCursorPosition = useRef<number | null>(null);
+  const [isManuallyScrolled, setIsManuallyScrolled] = useState(false);
+
   useEffect(() => {
     const inputElement = inputRef.current;
-    if (!inputElement) return;
+    if (!inputElement || isManuallyScrolled) return;
     if (lastCursorPosition.current !== null) {
       inputElement.scrollLeft = inputElement?.scrollWidth - lastCursorPosition.current;
     } else {
@@ -64,9 +66,6 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
-    const cursorPos = target.selectionStart ?? value.length;
-    lastCursorPosition.current = cursorPos;
-    window.scrollTo(cursorPos * 10, 0);
 
     const newValue = target.value.replace(/[^0-9+\-×÷%.]/g, '');
     onChange(newValue);
@@ -79,6 +78,26 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
       onCursorChange(lastCursorPosition.current);
     }
   };
+  const handleScroll = useCallback(() => {
+    const inputElement = inputRef.current;
+    if (inputElement) {
+      const isAtRightmost =
+        inputElement.scrollLeft + inputElement.clientWidth + 50 >= inputElement.scrollWidth;
+      setIsManuallyScrolled(!isAtRightmost);
+    }
+  }, []);
+
+  useEffect(() => {
+    const inputElement = inputRef.current;
+    if (inputElement) {
+      inputElement.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (inputElement) {
+        inputElement.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [handleScroll]);
 
   return (
     <Display>
