@@ -1,4 +1,4 @@
-import { Box, Container, styled } from '@mui/material';
+import { Container, styled } from '@mui/material';
 import './App.css';
 import { Calculator } from './components/Calculator';
 import { CalculatorProvider } from './context/CalculatorContext';

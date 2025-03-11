@@ -62,7 +62,7 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
     } else {
       inputElement.scrollLeft = inputElement?.scrollWidth;
     }
-  }, [value]);
+  }, [value, isManuallyScrolled]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
