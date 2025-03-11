@@ -18,7 +18,6 @@ const Display = styled(Box)({
   display: 'flex',
   alignItems: 'center',
   color: colors.text.primary,
-  overflow: 'hidden',
   whiteSpace: 'nowrap',
   ...typography.display,
 });
@@ -30,6 +29,9 @@ const StyledInput = styled(Input)({
   padding: 0,
   textAlign: 'right',
   caretColor: colors.text.primary,
+  touchAction: 'pan-x',
+  webkitOverflowScrolling: 'touch',
+  overflowX: 'auto',
   '&::before, &::after': {
     display: 'none',
   },
