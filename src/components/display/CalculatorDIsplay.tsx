@@ -9,6 +9,7 @@ interface CalculatorDisplayProps {
   onCursorChange?: (cursorPosition: number) => void;
 }
 
+// Styled component for the display container
 const Display = styled(Box)({
   width: '100%',
   height: '60px',
@@ -18,10 +19,12 @@ const Display = styled(Box)({
   display: 'flex',
   alignItems: 'center',
   color: colors.text.primary,
+  overflow: 'hidden',
   whiteSpace: 'nowrap',
   ...typography.display,
 });
 
+// Styled component for the input field
 const StyledInput = styled(Input)({
   width: '100%',
   color: colors.text.primary,
@@ -29,9 +32,6 @@ const StyledInput = styled(Input)({
   padding: 0,
   textAlign: 'right',
   caretColor: colors.text.primary,
-  touchAction: 'auto',
-  webkitOverflowScrolling: 'touch',
-  overflowX: 'auto',
   '&::before, &::after': {
     display: 'none',
   },
@@ -44,7 +44,7 @@ const StyledInput = styled(Input)({
     whiteSpace: 'nowrap',
     overflowX: 'auto',
     display: 'block',
-    touchAction: 'auto',
+    touchAction: 'pan-x',
     webkitOverflowScrolling: 'touch',
   },
   '&:hover': {
@@ -69,9 +69,18 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
+    const cursorPos = target.selectionStart ?? value.length;
+    lastCursorPosition.current = cursorPos;
 
     const newValue = target.value.replace(/[^0-9+\-×÷%.]/g, '');
     onChange(newValue);
+
+    if (cursorPos === target.value.length) {
+      const inputElement = inputRef.current;
+      if (inputElement) {
+        inputElement.scrollLeft = inputElement.scrollWidth;
+      }
+    }
   };
 
   const handleSelect = (event: React.SyntheticEvent<HTMLInputElement>) => {
@@ -81,11 +90,12 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
       onCursorChange(lastCursorPosition.current);
     }
   };
+
   const handleScroll = useCallback(() => {
     const inputElement = inputRef.current;
     if (inputElement) {
       const isAtRightmost =
-        inputElement.scrollLeft + inputElement.clientWidth + 50 >= inputElement.scrollWidth;
+        inputElement.scrollLeft + inputElement.clientWidth >= inputElement.scrollWidth;
       setIsManuallyScrolled(!isAtRightmost);
     }
   }, []);
@@ -109,6 +119,7 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
         value={value}
         onChange={handleChange}
         onSelect={handleSelect}
+        onInput={handleSelect}
       />
     </Display>
   );
