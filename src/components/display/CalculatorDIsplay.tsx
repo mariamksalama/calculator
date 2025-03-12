@@ -75,6 +75,12 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
 
     const newValue = target.value.replace(/[^0-9+\-*/%.]/g, '');
     onChange(newValue);
+    if (cursorPos === target.value.length) {
+      const inputElement = inputRef.current;
+      if (inputElement) {
+        inputElement.scrollLeft = inputElement.scrollWidth;
+      }
+    }
   };
 
   // Handles text selection and cursor position changes
