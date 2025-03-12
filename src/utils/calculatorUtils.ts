@@ -68,12 +68,30 @@ const tokenizeExpression = (expression: string): string[] => {
 
 export const calculateResult = (expression: string): string => {
   try {
+    console.log('hereh');
     const tokens = tokenizeExpression(expression);
     if (tokens.length === 0) return '0';
     if (tokens.length === 1) return tokens[0];
 
     const numbers: number[] = [];
     const operators: string[] = [];
+    if (tokens.includes('%')) {
+      const index = tokens.indexOf('%');
+      console.log('here', index);
+      if (
+        index === tokens.length - 1 ||
+        (index + 2 < tokens.length &&
+          Number(tokens[index - 1]) &&
+          !Number(tokens[index + 1]) &&
+          Number(tokens[index + 2]))
+      ) {
+        console.log('here2', tokens);
+        const number = parseFloat(tokens[index - 1]);
+        tokens[index - 1] = (number / 100).toString();
+        tokens.splice(index, 1);
+        console.log('here3', tokens);
+      }
+    }
 
     // Process each token
     tokens.forEach((token) => {
@@ -103,6 +121,8 @@ export const calculateResult = (expression: string): string => {
 
     return formatNumber(numbers[0]);
   } catch {
+    console.log('error');
+
     return 'Error';
   }
 };

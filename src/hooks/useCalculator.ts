@@ -18,9 +18,7 @@ import type { CalculatorContextType } from '../types/calculatorContextTypes';
  * - Handling operations
  * - Managing calculation history
  * - Controlling cursor position
- *
- * @throws {Error} If used outside of a CalculatorProvider
- * @returns {CalculatorContextType} The calculator context value
+
  */
 export function useCalculator(): CalculatorContextType {
   const context = useContext(CalculatorContext);

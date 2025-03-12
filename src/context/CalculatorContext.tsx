@@ -50,14 +50,6 @@ export function CalculatorProvider({ children }: CalculatorProviderProps) {
         setDisplayValue((prev) => (prev.startsWith('-') ? prev.slice(1) : '-' + prev));
         setCursorPosition((prev) => prev + 1);
         break;
-      case '%': // Convert to percentage
-        const value = parseFloat(displayValue);
-        if (!isNaN(value)) {
-          const newValue = (value / 100).toString();
-          setDisplayValue(newValue);
-          setCursorPosition(newValue.length);
-        }
-        break;
     }
   };
 
@@ -80,6 +72,13 @@ export function CalculatorProvider({ children }: CalculatorProviderProps) {
   // Updates display value with new input at specified cursor position
 
   const updateDisplay = (value: string, position: number) => {
+    // Clear error state when entering new number
+    if (displayValue === 'Error') {
+      setDisplayValue(value);
+      setCursorPosition(1);
+      return;
+    }
+
     // Prevent multiple decimal points
     if (value === '.' && displayValue.includes('.')) {
       return;

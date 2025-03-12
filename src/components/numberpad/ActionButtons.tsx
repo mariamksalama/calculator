@@ -1,9 +1,9 @@
 import { styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { CalculatorButton } from './CalculatorButton';
 import { actionButtons } from '../../utils/buttonUtils';
-import { BurgerMenu } from './BurgerMenu';
-import { spacing } from '../../theme/designSystem';
+import { spacing, colors } from '../../theme/designSystem';
 import { useCalculator } from '../../hooks/useCalculator';
 
 const ActionsRow = styled(Box)({
@@ -21,6 +21,14 @@ const ActionsRow = styled(Box)({
   },
 });
 
+const StyledIconButton = styled(IconButton)({
+  padding: 0,
+  color: colors.text.primary,
+  '& svg': {
+    fontSize: '1.5rem',
+  },
+});
+
 interface ActionButtonsProps {
   onClick: (value: string) => void;
 }
@@ -32,7 +40,12 @@ export const ActionButtons = ({ onClick }: ActionButtonsProps) => {
   return (
     <ActionsRow>
       <Box>
-        <BurgerMenu onClick={() => setIsHistoryOpen(true)} />
+        <StyledIconButton
+          onClick={() => setIsHistoryOpen(true)}
+          aria-label="Open calculation history"
+        >
+          <MenuIcon />
+        </StyledIconButton>
       </Box>
       <Box />
       <Box>

@@ -50,7 +50,8 @@ export const Calculator = () => {
     if (buttonValue === '=') {
       if (
         !(
-          isOperator(displayValue.charAt(displayValue.length - 1)) ||
+          (isOperator(displayValue.charAt(displayValue.length - 1)) &&
+            displayValue.charAt(displayValue.length - 1) != '%') ||
           displayValue.trim() === '' ||
           (displayValue.length === 1 && isOperator(displayValue))
         )
