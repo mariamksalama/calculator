@@ -61,20 +61,16 @@ const Result = styled(Box)({
   alignSelf: 'flex-end',
 });
 
-interface HistoryDialogProps {
-  onSelectExpression: (expression: string) => void;
-}
-
-export const HistoryDialog = ({ onSelectExpression }: HistoryDialogProps) => {
-  const { history, isHistoryOpen, setIsHistoryOpen } = useCalculator();
+export const HistoryDialog = () => {
+  const { history, isHistoryOpen, setIsHistoryOpen, setDisplayValue } = useCalculator();
 
   const handleClose = () => {
     setIsHistoryOpen(false);
   };
 
   const handleItemClick = (expression: string) => {
-    onSelectExpression(expression);
     setIsHistoryOpen(false);
+    setDisplayValue(expression);
   };
 
   return (

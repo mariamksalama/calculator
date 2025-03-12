@@ -22,21 +22,14 @@ const CalculatorGrid = styled(Box)({
   touchAction: 'manipulation',
 });
 
-interface NumberPadProps {
-  onClick: (value: string, isOperator?: boolean) => void;
-}
-
 // Main number pad component that combines all button groups
-export const NumberPad = ({ onClick }: NumberPadProps) => {
-  const handleOperatorClick = (value: string) => onClick(value, true);
-  const handleButtonClick = (value: string) => onClick(value);
-
+export const NumberPad = () => {
   return (
     <CalculatorGrid>
-      <ControlButtons onClick={handleButtonClick} />
-      <NumberButtons onClick={handleButtonClick} />
-      <OperatorButtons onClick={handleOperatorClick} />
-      <ActionButtons onClick={handleButtonClick} />
+      <ControlButtons />
+      <NumberButtons />
+      <OperatorButtons />
+      <ActionButtons />
     </CalculatorGrid>
   );
 };

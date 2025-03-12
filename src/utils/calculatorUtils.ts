@@ -120,39 +120,3 @@ export const calculateResult = (expression: string): string => {
     return 'Error';
   }
 };
-
-// Check if expression ends with an operator
-const endsWithOperator = (value: string): boolean => {
-  return /[+\-*/%]$/.test(value);
-};
-
-export const handleCalculatorInput = (
-  currentValue: string,
-  buttonValue: string,
-  isOperator?: boolean
-): string => {
-  // Handle special operations
-  switch (buttonValue) {
-    case 'ac':
-      return '0';
-    case 'del':
-      return currentValue.length > 1 ? currentValue.slice(0, -1) : '0';
-    case '+/-':
-      if (currentValue === '0') return currentValue;
-      return currentValue.startsWith('-') ? currentValue.slice(1) : '-' + currentValue;
-  }
-
-  // Handle regular input
-  if (currentValue === '0') {
-    if (buttonValue === '-') return '-';
-    if (!isOperator) return buttonValue;
-  }
-
-  if (isOperator) {
-    return endsWithOperator(currentValue)
-      ? currentValue.slice(0, -1) + buttonValue
-      : currentValue + buttonValue;
-  }
-
-  return currentValue + buttonValue;
-};

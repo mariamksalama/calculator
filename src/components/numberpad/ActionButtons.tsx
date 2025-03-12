@@ -2,9 +2,10 @@ import { styled } from '@mui/material/styles';
 import { Box, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { CalculatorButton } from './CalculatorButton';
-import { actionButtons } from '../../utils/buttonUtils';
+import { actionButtons, isOperator } from '../../utils/buttonUtils';
 import { spacing, colors } from '../../theme/designSystem';
 import { useCalculator } from '../../hooks/useCalculator';
+import { calculateResult } from '../../utils/calculatorUtils';
 
 const ActionsRow = styled(Box)({
   display: 'grid',
@@ -29,13 +30,26 @@ const StyledIconButton = styled(IconButton)({
   },
 });
 
-interface ActionButtonsProps {
-  onClick: (value: string) => void;
-}
-
-export const ActionButtons = ({ onClick }: ActionButtonsProps) => {
+export const ActionButtons = () => {
   const [, equalsButton] = actionButtons;
-  const { setIsHistoryOpen } = useCalculator();
+  const { setIsHistoryOpen, displayValue, setDisplayValue, addToHistory } = useCalculator();
+
+  const handleEqualButtonClick = () => {
+    if (
+      !(
+        (isOperator(displayValue.charAt(displayValue.length - 1)) &&
+          displayValue.charAt(displayValue.length - 1) != '%') ||
+        displayValue.trim() === '' ||
+        (displayValue.length === 1 && isOperator(displayValue))
+      )
+    ) {
+      const result = calculateResult(displayValue);
+      setDisplayValue(result);
+      if (!result.includes('Error') && !result.includes('Nan')) {
+        addToHistory(displayValue, result);
+      }
+    }
+  };
 
   return (
     <ActionsRow>
@@ -49,7 +63,7 @@ export const ActionButtons = ({ onClick }: ActionButtonsProps) => {
       </Box>
       <Box />
       <Box>
-        <CalculatorButton {...equalsButton} onClick={() => onClick(equalsButton.value)} />
+        <CalculatorButton {...equalsButton} onClick={() => handleEqualButtonClick()} />
       </Box>
     </ActionsRow>
   );

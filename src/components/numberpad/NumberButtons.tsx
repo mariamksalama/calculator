@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import { CalculatorButton } from './CalculatorButton';
 import { numberButtons, decimalButton } from '../../utils/buttonUtils';
 import { spacing } from '../../theme/designSystem';
+import { useCalculator } from '../../hooks/useCalculator';
 
 const NumbersGrid = styled(Box)({
   display: 'grid',
@@ -15,21 +16,23 @@ const NumbersGrid = styled(Box)({
   },
 });
 
-interface NumberButtonsProps {
-  onClick: (value: string) => void;
-}
-
-export const NumberButtons = ({ onClick }: NumberButtonsProps) => (
-  <NumbersGrid role="group" aria-label="Number pad">
-    {numberButtons.map((button) => (
+export const NumberButtons = () => {
+  const { updateDisplay, cursorPosition } = useCalculator();
+  return (
+    <NumbersGrid role="group" aria-label="Number pad">
+      {numberButtons.map((button) => (
+        <CalculatorButton
+          key={button.value}
+          {...button}
+          onClick={() => updateDisplay(button.value, cursorPosition)}
+          className={button.value === '0' ? 'zero-button' : ''}
+          aria-label={button.ariaLabel}
+        />
+      ))}
       <CalculatorButton
-        key={button.value}
-        {...button}
-        onClick={() => onClick(button.value)}
-        className={button.value === '0' ? 'zero-button' : ''}
-        aria-label={button.ariaLabel}
+        {...decimalButton}
+        onClick={() => updateDisplay(decimalButton.value, cursorPosition)}
       />
-    ))}
-    <CalculatorButton {...decimalButton} onClick={() => onClick(decimalButton.value)} />
-  </NumbersGrid>
-);
+    </NumbersGrid>
+  );
+};

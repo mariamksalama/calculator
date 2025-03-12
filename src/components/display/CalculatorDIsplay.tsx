@@ -2,12 +2,7 @@ import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Input } from '@mui/material';
 import { spacing, typography, colors, borderRadius } from '../../theme/designSystem';
-
-interface CalculatorDisplayProps {
-  value: string;
-  onChange: (value: string) => void;
-  onCursorChange?: (cursorPosition: number) => void;
-}
+import { useCalculator } from '../../hooks/useCalculator';
 
 // Styled container for the calculator display
 const Display = styled(Box)({
@@ -51,38 +46,37 @@ const StyledInput = styled(Input)({
   },
 });
 
-export const CalculatorDisplay = ({ value, onChange, onCursorChange }: CalculatorDisplayProps) => {
+export const CalculatorDisplay = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const lastCursorPosition = useRef<number | null>(null);
   const [isManuallyScrolled, setIsManuallyScrolled] = useState(false);
+  const { displayValue, setDisplayValue, setCursorPosition, cursorPosition } = useCalculator();
 
   // Auto-scroll to cursor position when value changes
   useEffect(() => {
     const inputElement = inputRef.current;
     if (!inputElement || isManuallyScrolled) return;
-    if (lastCursorPosition.current !== null) {
-      inputElement.scrollLeft = inputElement?.scrollWidth - lastCursorPosition.current;
+    if (cursorPosition !== null) {
+      inputElement.scrollLeft = inputElement?.scrollWidth - cursorPosition;
     } else {
       inputElement.scrollLeft = inputElement?.scrollWidth;
     }
-  }, [value, isManuallyScrolled]);
+  }, [displayValue, isManuallyScrolled, cursorPosition]);
 
   // Handles input changes and filters out invalid characters
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
-    const cursorPos = target.selectionStart ?? value.length;
-    lastCursorPosition.current = cursorPos;
+    const cursorPos = target.selectionStart ?? displayValue.length;
+    setCursorPosition(cursorPos);
 
     const newValue = target.value.replace(/[^0-9+\-*/%.]/g, '');
-    onChange(newValue);
+    setDisplayValue(newValue);
   };
 
   // Handles text selection and cursor position changes
   const handleSelect = (event: React.SyntheticEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
-    lastCursorPosition.current = target.selectionStart;
-    if (onCursorChange && lastCursorPosition.current !== null) {
-      onCursorChange(lastCursorPosition.current);
+    if (setCursorPosition && target.selectionStart && cursorPosition !== null) {
+      setCursorPosition(target.selectionStart);
     }
   };
 
@@ -94,17 +88,15 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
     // Use requestAnimationFrame to continuously check cursor position during touch interaction
     const checkCursorPosition = () => {
       const cursorPos = inputElement.selectionStart;
-      if (cursorPos !== lastCursorPosition.current) {
-        lastCursorPosition.current = cursorPos;
-        if (onCursorChange && cursorPos !== null) {
-          onCursorChange(cursorPos);
-        }
+
+      if (setCursorPosition && cursorPos !== null) {
+        setCursorPosition(cursorPos);
       }
       touchAnimationFrame.current = requestAnimationFrame(checkCursorPosition);
     };
 
     touchAnimationFrame.current = requestAnimationFrame(checkCursorPosition);
-  }, [onCursorChange]);
+  }, [setCursorPosition]);
 
   const handleTouchEnd = useCallback(() => {
     if (touchAnimationFrame.current) {
@@ -151,7 +143,7 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
     <Display>
       <StyledInput
         inputRef={inputRef}
-        value={value}
+        value={displayValue}
         onChange={handleChange}
         onSelect={handleSelect}
         onInput={handleSelect}

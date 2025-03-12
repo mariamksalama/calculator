@@ -3,9 +3,7 @@ import { Box } from '@mui/material';
 
 import { CalculatorDisplay } from './display/CalculatorDIsplay';
 import { NumberPad } from './numberpad/NumberPad';
-import { calculateResult } from '../utils/calculatorUtils';
 import { HistoryDialog } from './history/HistoryDialog';
-import { isControl, isOperator } from '../utils/buttonUtils';
 import { borderRadius, shadows, spacing, colors } from '../theme/designSystem';
 import { useCalculator } from '../hooks/useCalculator';
 
@@ -32,64 +30,13 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 
 // Main calculator component that orchestrates display, number pad, and history functionality
 export const Calculator = () => {
-  const {
-    displayValue,
-    setDisplayValue,
-    updateDisplay,
-    addToHistory,
-    isHistoryOpen,
-    setIsHistoryOpen,
-    handleControl,
-    handleOperator,
-    cursorPosition,
-    setCursorPosition,
-  } = useCalculator();
-
-  // Handles all button clicks (numbers, operators, controls, and special functions)
-  const handleButtonClick = (buttonValue: string) => {
-    if (buttonValue === '=') {
-      if (
-        !(
-          (isOperator(displayValue.charAt(displayValue.length - 1)) &&
-            displayValue.charAt(displayValue.length - 1) != '%') ||
-          displayValue.trim() === '' ||
-          (displayValue.length === 1 && isOperator(displayValue))
-        )
-      ) {
-        const result = calculateResult(displayValue);
-        setDisplayValue(result);
-        if (!result.includes('Error') && !result.includes('Nan')) {
-          addToHistory(displayValue, result);
-        }
-      }
-    } else if (buttonValue === 'h') {
-      setIsHistoryOpen(true);
-    } else if (isControl(buttonValue)) {
-      handleControl(buttonValue);
-    } else if (isOperator(buttonValue)) {
-      handleOperator(buttonValue);
-    } else {
-      updateDisplay(buttonValue, cursorPosition);
-    }
-  };
-
-  const handleDisplayChange = (newValue: string) => {
-    setDisplayValue(newValue);
-  };
-
-  const handleHistorySelect = (expression: string) => {
-    setDisplayValue(expression);
-  };
+  const { isHistoryOpen } = useCalculator();
 
   return (
     <StyledContainer role="application" aria-label="Calculator">
-      <CalculatorDisplay
-        value={displayValue}
-        onChange={handleDisplayChange}
-        onCursorChange={setCursorPosition}
-      />
-      <NumberPad onClick={handleButtonClick} />
-      {isHistoryOpen && <HistoryDialog onSelectExpression={handleHistorySelect} />}
+      <CalculatorDisplay />
+      <NumberPad />
+      {isHistoryOpen && <HistoryDialog />}
     </StyledContainer>
   );
 };
