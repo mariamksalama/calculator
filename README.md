@@ -63,20 +63,16 @@ During development, I used cursor for autocomplete, created inclusive test cases
 I’ve also deployed my app, so you can try it out without having to run it locally.
 
 Features
-*Basic arithmetic operations (+, -, /, , %)
-Modern, responsive design
-Built with React and TypeScript
-Vite for fast development
+-Basic arithmetic operations (+, -, /, , %)
+-Modern, responsive design
+-Built with React and TypeScript
+-Vite for fast development
 Tech Stack
-🔹 React
-🔹 TypeScript
-🔹 Vite
-🔹 Material-UI
+-🔹 React
+-🔹 TypeScript
+-🔹 Vite
+-🔹 Material-UI
 
 How to Run the Project Locally
-sh
-Copy
-Edit
-npm install
-npm run dev
-Now your text is formatted properly with bolded titles, bullet points, and spacing, making it easier to read and visually structured. Let me know if you need any modifications! 🚀
+-npm install
+-npm run dev
