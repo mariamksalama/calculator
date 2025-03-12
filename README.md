@@ -54,7 +54,8 @@ This calculator supports:
 ✅ Screen reader-friendly!
 
 Live Demo:
-🔗 Try the app here!
+🔗[Link Try the app here!](https://calculator-jd3u.vercel.app/)
+
 
 Development Details:
 During development, I used cursor for autocomplete, created inclusive test cases, and documented my code.
