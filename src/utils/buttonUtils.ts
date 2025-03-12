@@ -57,20 +57,3 @@ export const isOperator = (char: string): boolean => {
 export const isControl = (char: string): boolean => {
   return controlButtons.some((button) => button.value === char);
 };
-
-export const getButtonColor = (variant: VariantTypes) => {
-  switch (variant) {
-    case 'operator':
-      return '#E46962';
-    case 'control':
-      return '#65558F';
-    case 'decimal':
-      return '#4A4459';
-    case 'number':
-      return '#4A4459';
-    case 'action':
-      return 'black';
-    default:
-      return 'black';
-  }
-};
