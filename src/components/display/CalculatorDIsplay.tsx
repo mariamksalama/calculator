@@ -43,7 +43,7 @@ const StyledInput = styled(Input)({
     whiteSpace: 'nowrap',
     overflowX: 'auto',
     display: 'block',
-    touchAction: 'pan-x',
+    touchAction: 'manipulation',
     webkitOverflowScrolling: 'touch',
   },
   '&:hover': {
@@ -75,12 +75,6 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
 
     const newValue = target.value.replace(/[^0-9+\-*/%.]/g, '');
     onChange(newValue);
-    if (cursorPos === target.value.length) {
-      const inputElement = inputRef.current;
-      if (inputElement) {
-        inputElement.scrollLeft = inputElement.scrollWidth;
-      }
-    }
   };
 
   // Handles text selection and cursor position changes
@@ -91,6 +85,44 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
       onCursorChange(lastCursorPosition.current);
     }
   };
+
+  // Handle touch selection changes
+  const handleTouchStart = useCallback(() => {
+    const inputElement = inputRef.current;
+    if (!inputElement) return;
+
+    // Use requestAnimationFrame to continuously check cursor position during touch interaction
+    const checkCursorPosition = () => {
+      const cursorPos = inputElement.selectionStart;
+      if (cursorPos !== lastCursorPosition.current) {
+        lastCursorPosition.current = cursorPos;
+        if (onCursorChange && cursorPos !== null) {
+          onCursorChange(cursorPos);
+        }
+      }
+      touchAnimationFrame.current = requestAnimationFrame(checkCursorPosition);
+    };
+
+    touchAnimationFrame.current = requestAnimationFrame(checkCursorPosition);
+  }, [onCursorChange]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (touchAnimationFrame.current) {
+      cancelAnimationFrame(touchAnimationFrame.current);
+    }
+  }, []);
+
+  // Reference for the animation frame
+  const touchAnimationFrame = useRef<number | undefined>(undefined);
+
+  // Clean up animation frame on unmount
+  useEffect(() => {
+    return () => {
+      if (touchAnimationFrame.current) {
+        cancelAnimationFrame(touchAnimationFrame.current);
+      }
+    };
+  }, []);
 
   // Tracks manual horizontal scrolling
   const handleScroll = useCallback(() => {
@@ -123,6 +155,9 @@ export const CalculatorDisplay = ({ value, onChange, onCursorChange }: Calculato
         onChange={handleChange}
         onSelect={handleSelect}
         onInput={handleSelect}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
       />
     </Display>
   );
