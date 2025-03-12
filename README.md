@@ -1,6 +1,6 @@
-Part 1: SEO Improvement
-Below, I will be discussing my top 3 suggestions for improving SEO, taking into account the time it would take for each one and the importance.
-I have used Screaming Frog, Neil Patel, and SEMrush to reach these conclusions and will mention the data I obtained from each tool and how that affected my decision:
+# **Part 1: SEO Improvement**
+## **Below, I will be discussing my top 3 suggestions for improving SEO, taking into account the time it would take for each one and the importance.**
+## **I have used Screaming Frog, Neil Patel, and SEMrush to reach these conclusions and will mention the data I obtained from each tool and how that affected my decision:**
 
 1. Fixing Broken Links
 There are a couple of broken links on the page:
@@ -42,9 +42,9 @@ I’ve also run a PageSpeed test, and the results concluded that the website is 
 44 performance on desktop 🖥️
 This, to me, speaks high priority, but it would require planning and dedicated time to fix, so I’d put it as a goal rather than an immediate task.
 
-Part 2: Calculator App
-This is my calculator app.
-I’ve added a couple of extra buttons, as I noticed we didn’t have an "=" button. There’s also a burger menu, which shows the history.
+# **Part 2: Calculator App**
+## **This is my calculator app.**
+## **I’ve added a couple of extra buttons, as I noticed we didn’t have an "=" button. There’s also a burger menu, which shows the history.**
 
 I thought this would be a fun feature, as it allows you to directly make changes to the previous operation rather than having to re-enter all the values again if you make a mistake!
 
