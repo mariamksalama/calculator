@@ -11,7 +11,7 @@ export interface CalculatorContextType {
   setIsHistoryOpen: (open: boolean) => void;
   displayValue: string;
   setDisplayValue: (value: string) => void;
-  updateDisplay: (value: string, position: number) => void;
+  updateDisplay: (value: string) => void;
   handleControl: (control: string) => void;
   handleOperator: (operator: string) => void;
   cursorPosition: number;

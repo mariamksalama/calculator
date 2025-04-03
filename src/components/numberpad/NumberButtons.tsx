@@ -17,22 +17,19 @@ const NumbersGrid = styled(Box)({
 });
 
 export const NumberButtons = () => {
-  const { updateDisplay, cursorPosition } = useCalculator();
+  const { updateDisplay } = useCalculator();
   return (
     <NumbersGrid role="group" aria-label="Number pad">
       {numberButtons.map((button) => (
         <CalculatorButton
           key={button.value}
           {...button}
-          onClick={() => updateDisplay(button.value, cursorPosition)}
+          onClick={() => updateDisplay(button.value)}
           className={button.value === '0' ? 'zero-button' : ''}
           aria-label={button.ariaLabel}
         />
       ))}
-      <CalculatorButton
-        {...decimalButton}
-        onClick={() => updateDisplay(decimalButton.value, cursorPosition)}
-      />
+      <CalculatorButton {...decimalButton} onClick={() => updateDisplay(decimalButton.value)} />
     </NumbersGrid>
   );
 };

@@ -71,7 +71,8 @@ export function CalculatorProvider({ children }: CalculatorProviderProps) {
 
   // Updates display value with new input at specified cursor position
 
-  const updateDisplay = (value: string, position: number) => {
+  const updateDisplay = (value: string) => {
+    const position = cursorPosition;
     // Clear error state when entering new number
     if (displayValue === 'Error') {
       setDisplayValue(value);
